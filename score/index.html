@@ -15,25 +15,47 @@
 <body>
     <div id="result"></div>
     <div id="main"></div>
+    <div id="log"></div>
     <script>
-        var vendors = ['ms', 'moz', 'webkit', 'o'];
-        for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-            window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
-            window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
-        }
-        const windowHeight = window.screen.availHeight;
-        const windowWidth = window.screen.availWidth;
-        const FRAME = 20;
-        const NUM = 200;
+        (function() {
+            var lastTime = 0;
+            var vendors = ['ms', 'moz', 'webkit', 'o'];
+            for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+                window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+                window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] 
+                                        || window[vendors[x]+'CancelRequestAnimationFrame'];
+            }
+        
+            if (!window.requestAnimationFrame)
+                window.requestAnimationFrame = function(callback, element) {
+                    var currTime = new Date().getTime();
+                    var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+                    var id = window.setTimeout(function() { callback(currTime + timeToCall); }, 
+                    timeToCall);
+                    lastTime = currTime + timeToCall;
+                    return id;
+                };
+        
+            if (!window.cancelAnimationFrame)
+                window.cancelAnimationFrame = function(id) {
+                    clearTimeout(id);
+                };
+        }());
+    </script>
+    <script>
+        var windowHeight = window.screen.availHeight;
+        var windowWidth = window.screen.availWidth;
+        var FRAME = 20;
+        var NUM = 200;
 
-        let main = document.querySelector('#main');
-        let ul = document.createElement('ul');
-        let ulList = [];
+        var main = document.querySelector('#main');
+        var ul = document.createElement('ul');
+        var ulList = [];
         main.appendChild(ul);
 
-        for( let i = 0; i < NUM; i++) {
-            let each = document.createElement('li');
-            let { style } = each;
+        for( var i = 0; i < NUM; i++) {
+            var each = document.createElement('li');
+            var { style } = each;
             style.display = 'block';
             style.width = '100px';
             style.height = '100px';
@@ -47,27 +69,29 @@
             ulList.push(each);
         }
 
-        let lastTime = performance.now();
+        
 
-        for( let j = 0; j < NUM; j++) {
-            let start = 1;
-            let element = ulList[j];
-            let r = Math.random();
-            let r1 = Math.random() * 2 - 1;
-            let r2 = Math.random() * 2 - 1;
+        var lastTime = performance.now();
 
+        for( var j = 0; j < NUM; j++) {
+            var start = 1;
+            var element = ulList[j];
+            var r = Math.random();
+            var r1 = Math.random() * 2 - 1;
+            var r2 = Math.random() * 2 - 1;
+            
             function step(time) {
                 start = start - (1 - r) / FRAME;
                 element.style.opacity = start;
-                element.style.webkitTransform = `scale(${start}) translate(${windowWidth * r1 + 'px'}, ${windowHeight * r2 + 'px'})`;
+                element.style.webkitTransform = 'scale(' + start + ') translate(' + windowWidth * r1 + 'px,' + windowHeight * r2 + 'px)';
                 if (start > r) {
                     window.requestAnimationFrame(step);
                 } else {
                     if(j === NUM-1){
-                        const endTime = performance.now();
-                        const t = endTime-lastTime;
-                        const fps = 1000 * FRAME / t;
-                        const score = Math.floor(10000 * fps / t)               
+                        var endTime = performance.now();
+                        var t = endTime-lastTime;
+                        var fps = 1000 * FRAME / t;
+                        var score = Math.floor(10000 * fps / t)               
                         console.log(fps, score);
                         document.querySelector('#result').innerHTML = `fps: ${Math.round(fps)}, score: ${score}`;
                     }
@@ -75,9 +99,6 @@
             }
             window.requestAnimationFrame(step);
         }
-
-        
-
     </script>
 </body>
 </html>
