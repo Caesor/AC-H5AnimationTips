@@ -43,6 +43,7 @@
         }());
     </script>
     <script>
+        const log = document.querySelector('#log')
         const windowHeight = window.screen.availHeight;
         const windowWidth = window.screen.availWidth;
         const FRAME = 20;
@@ -71,29 +72,31 @@
 
         
 
-        let lastTime = performance.now();
+        let startTime = performance.now();
 
         for( let j = 0; j < NUM; j++) {
-            let start = 1;
+            var start = 0;
             let element = ulList[j];
-            let r = Math.random();
-            let r1 = Math.random() * 2 - 1;
-            let r2 = Math.random() * 2 - 1;
             
             function step(time) {
-                start = start - (1 - r) / FRAME;
-                element.style.opacity = start;
-                element.style.webkitTransform = "scale(" + start + ") translate(" + windowWidth * r1 + "px," + windowHeight * r2 + "px)";
-                if (start > r) {
+                
+                start = start + 1;
+                
+                let r = Math.random();
+                let r1 = Math.random() * 2 - 1;
+                let r2 = Math.random() * 2 - 1;
+                
+                element.style.opacity = r;
+                element.style.webkitTransform = `scale(${r}) translate(${windowWidth * r1 + 'px'}, ${windowHeight * r2 + 'px'})`;
+                if (start < FRAME) {
                     window.requestAnimationFrame(step);
                 } else {
-                    if(j === NUM-1){
-                        const endTime = performance.now();
-                        const t = endTime-lastTime;
+                    if(j === NUM - 1){
+                        const t = performance.now() - startTime;
                         const fps = 1000 * FRAME / t;
                         const score = Math.floor(10000 * fps / t)               
-                        console.log(fps, score);
-                        document.querySelector('#result').innerHTML = `fps: ${Math.round(fps)}, score: ${score}`;
+                        console.log(start, fps, score);
+                        // document.querySelector('#result').innerHTML = `fps: ${Math.round(fps)}, score: ${score}`;
                     }
                 }
             }
