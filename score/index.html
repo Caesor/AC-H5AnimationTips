@@ -43,19 +43,19 @@
         }());
     </script>
     <script>
-        var windowHeight = window.screen.availHeight;
-        var windowWidth = window.screen.availWidth;
-        var FRAME = 20;
-        var NUM = 200;
+        const windowHeight = window.screen.availHeight;
+        const windowWidth = window.screen.availWidth;
+        const FRAME = 20;
+        const NUM = 200;
 
-        var main = document.querySelector('#main');
-        var ul = document.createElement('ul');
-        var ulList = [];
+        let main = document.querySelector('#main');
+        let ul = document.createElement('ul');
+        let ulList = [];
         main.appendChild(ul);
 
-        for( var i = 0; i < NUM; i++) {
-            var each = document.createElement('li');
-            var { style } = each;
+        for( let i = 0; i < NUM; i++) {
+            let each = document.createElement('li');
+            let { style } = each;
             style.display = 'block';
             style.width = '100px';
             style.height = '100px';
@@ -71,27 +71,27 @@
 
         
 
-        var lastTime = performance.now();
+        let lastTime = performance.now();
 
-        for( var j = 0; j < NUM; j++) {
-            var start = 1;
-            var element = ulList[j];
-            var r = Math.random();
-            var r1 = Math.random() * 2 - 1;
-            var r2 = Math.random() * 2 - 1;
+        for( let j = 0; j < NUM; j++) {
+            let start = 1;
+            let element = ulList[j];
+            let r = Math.random();
+            let r1 = Math.random() * 2 - 1;
+            let r2 = Math.random() * 2 - 1;
             
             function step(time) {
                 start = start - (1 - r) / FRAME;
                 element.style.opacity = start;
-                element.style.webkitTransform = 'scale(' + start + ') translate(' + windowWidth * r1 + 'px,' + windowHeight * r2 + 'px)';
+                element.style.webkitTransform = "scale(" + start + ") translate(" + windowWidth * r1 + "px," + windowHeight * r2 + "px)";
                 if (start > r) {
                     window.requestAnimationFrame(step);
                 } else {
                     if(j === NUM-1){
-                        var endTime = performance.now();
-                        var t = endTime-lastTime;
-                        var fps = 1000 * FRAME / t;
-                        var score = Math.floor(10000 * fps / t)               
+                        const endTime = performance.now();
+                        const t = endTime-lastTime;
+                        const fps = 1000 * FRAME / t;
+                        const score = Math.floor(10000 * fps / t)               
                         console.log(fps, score);
                         document.querySelector('#result').innerHTML = `fps: ${Math.round(fps)}, score: ${score}`;
                     }
