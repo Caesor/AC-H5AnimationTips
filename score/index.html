@@ -22,16 +22,14 @@
             var vendors = ['ms', 'moz', 'webkit', 'o'];
             for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
                 window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
-                window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] 
-                                        || window[vendors[x]+'CancelRequestAnimationFrame'];
+                window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
             }
         
             if (!window.requestAnimationFrame)
                 window.requestAnimationFrame = function(callback, element) {
                     var currTime = new Date().getTime();
                     var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-                    var id = window.setTimeout(function() { callback(currTime + timeToCall); }, 
-                    timeToCall);
+                    var id = window.setTimeout(function() { callback(currTime + timeToCall); }, timeToCall);
                     lastTime = currTime + timeToCall;
                     return id;
                 };
@@ -41,67 +39,23 @@
                     clearTimeout(id);
                 };
         }());
-    </script>
-    <script>
-        const log = document.querySelector('#log')
-        const windowHeight = window.screen.availHeight;
-        const windowWidth = window.screen.availWidth;
-        const FRAME = 20;
-        const NUM = 200;
 
-        let main = document.querySelector('#main');
-        let ul = document.createElement('ul');
-        let ulList = [];
-        main.appendChild(ul);
-
-        for( let i = 0; i < NUM; i++) {
-            let each = document.createElement('li');
-            let { style } = each;
-            style.display = 'block';
-            style.width = '100px';
-            style.height = '100px';
-            style.position = 'absolute';
-            style.top = '50%';
-            style.left = '50%';
-            style.marginLeft = '-50px';
-            style.marginTop = '-50px';
-            style.backgroundColor = ['red', 'yellow', 'green', 'blue'][(Math.floor(Math.random() * 10) + 1) % 4];
-            ul.appendChild(each);
-            ulList.push(each);
-        }
-
-        
-
-        let startTime = performance.now();
-
-        for( let j = 0; j < NUM; j++) {
-            var start = 0;
-            let element = ulList[j];
-            
-            function step(time) {
-                
-                start = start + 1;
-                
-                let r = Math.random();
-                let r1 = Math.random() * 2 - 1;
-                let r2 = Math.random() * 2 - 1;
-                
-                element.style.opacity = r;
-                element.style.webkitTransform = `scale(${r}) translate(${windowWidth * r1 + 'px'}, ${windowHeight * r2 + 'px'})`;
-                if (start < FRAME) {
-                    window.requestAnimationFrame(step);
-                } else {
-                    if(j === NUM - 1){
-                        const t = performance.now() - startTime;
-                        const fps = 1000 * FRAME / t;
-                        const score = Math.floor(10000 * fps / t)               
-                        console.log(start, fps, score);
-                        // document.querySelector('#result').innerHTML = `fps: ${Math.round(fps)}, score: ${score}`;
-                    }
-                }
+        window.onerror = function(msg, source, lineN, colN, error) {
+            var string =  msg.toLowerCase();
+            var substring = "script error";
+            if(string.indexOf(substring) > -1) {
+                console.log('script error');
+            }else {
+                console.error(msg, error.stack);
             }
-            window.requestAnimationFrame(step);
+            return false;
         }
     </script>
+    <!-- <script src="./log.js"></script>
+    <script>
+        Mlogger.init({});
+        Mlogger.show();
+    </script> -->
+    <script src="./score.js"></script>
 </body>
 </html>
