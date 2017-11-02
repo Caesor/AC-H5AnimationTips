@@ -48,26 +48,26 @@
         for(let i = 0; i < 22; i++){
             source.push(`./resource/frames/${i+1}.png`);
         }
+//         var frame1 = new FrameAnimate(canvas, {
+//             source: ['./resource/spritesheet.png'],
+//             singleMode: true,
+//             width: 438,
+//             height: 399,
+//             loop: false,
+//             fps: 25
+//         }, () => {
+//             console.log('=== Animation stopped ===');
+//             document.querySelector('.stage').classList.add('easehide');
+//         });
         var frame1 = new FrameAnimate(canvas, {
-            source: ['./resource/spritesheet.png'],
-            singleMode: true,
-            width: 438,
-            height: 399,
+            source,
+            frame: 22,
             loop: false,
             fps: 25
         }, () => {
             console.log('=== Animation stopped ===');
             document.querySelector('.stage').classList.add('easehide');
         });
-        // var frame1 = new FrameAnimate(canvas, {
-        //     source,
-        //     frame: 22,
-        //     loop: false,
-        //     fps: 25
-        // }, () => {
-        //     console.log('=== Animation stopped ===');
-        //     document.querySelector('.stage').classList.add('easehide');
-        // });
         // debugger
         frame1.play();
     </script>
